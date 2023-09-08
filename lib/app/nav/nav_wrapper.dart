@@ -2,11 +2,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:xwallet/app/auth_wrapper/auth_wrapper.dart';
+import 'package:xwallet/app/auth_wrapper/login/login_view.dart';
+import 'package:xwallet/app/auth_wrapper/login/vm/auth_vm.dart';
 import 'package:xwallet/app/nav/nav_wrapper_vm.dart';
+import 'package:xwallet/app/auth_wrapper/onboard/onboard_view.dart';
+import 'package:xwallet/app/settings/settings_view.dart';
+import 'package:xwallet/app/sub_dealers/sub_dealers.dart';
+import 'package:xwallet/app/wallets/wallets_view.dart';
 
 import '../../utils/app_colors.dart';
+import '../home/home_view.dart';
 
 class NavWrapper extends ConsumerStatefulWidget {
   const NavWrapper({super.key});
@@ -18,7 +27,10 @@ class NavWrapper extends ConsumerStatefulWidget {
 class _NavWrapperState extends ConsumerState<NavWrapper> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     final navVm = ref.watch(navVmProvider);
+    final user = ref.watch(userProvider).value;
+    if (user == null) return const AuthWrapper();
     List<NavItem> navItems = [
       NavItem(title: 'Home', iconPath: 'assets/icons/home.svg'),
       NavItem(title: 'Wallets', iconPath: 'assets/icons/wallets.svg'),
@@ -32,11 +44,11 @@ class _NavWrapperState extends ConsumerState<NavWrapper> {
           body: PageView(
             onPageChanged: navVm.onPageChanged,
             controller: navVm.pageController,
-            children: [
-              const Placeholder(),
-              const Placeholder(color: Colors.red),
-              const Placeholder(color: Colors.purple),
-              const Placeholder(color: Colors.amber),
+            children: const [
+              HomeView(),
+              WalletsView(),
+              SubDealers(),
+              SettingsView(),
             ],
           ),
         ),
@@ -64,7 +76,7 @@ class _NavWrapperState extends ConsumerState<NavWrapper> {
                         onTap: () {
                           navVm.goToPage(i);
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: 60,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

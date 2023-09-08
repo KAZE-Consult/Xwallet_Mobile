@@ -1,31 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:xwallet/app/onboard/onboard_view.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xwallet/app/forgot_password/forgot_password.dart';
+import 'package:xwallet/app/auth_wrapper/login/vm/auth_vm.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/reuseables/text_area_field.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-import '../../utils/app_colors.dart';
+import '../../../utils/app_colors.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
-  static Route route() {
-    return PageRouteBuilder(
-      pageBuilder: (_, a, a2) {
-        return const LoginView();
-      },
-    );
-  }
+class LoginView extends ConsumerStatefulWidget {
+  const LoginView({
+    required this.toOnboard,
+    super.key,
+  });
+  final VoidCallback toOnboard;
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   bool obscurePassword = true;
   @override
   Widget build(BuildContext context) {
+    final authVm = AuthVm();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -64,19 +63,27 @@ class _LoginViewState extends State<LoginView> {
               maxLines: 1,
             ),
             const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Forgot Password',
-                style: subtitle.copyWith(color: AppColors.accent),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                ForgotPassword.open(context);
+              },
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Forgot Password',
+                  style: subtitle.copyWith(color: AppColors.accent),
+                ),
               ),
             ),
             const SizedBox(height: 32),
             AppButton(
               color: AppColors.accent,
               size: const Size(double.infinity, 45),
-              child: const Text('Submit'),
-              onTap: () {},
+              child: Text('Submit', style: bodyBoldLight),
+              onTap: () {
+                authVm.login('userName', 'password');
+              },
             ),
             const SizedBox(height: 16),
             CupertinoButton(
@@ -91,7 +98,7 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               onPressed: () {
-                Navigator.pushReplacement(context, OnboardView.route());
+                widget.toOnboard();
               },
             )
           ],

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 // This widget converts its child to a button
 class AppButton extends StatelessWidget {
@@ -7,11 +6,12 @@ class AppButton extends StatelessWidget {
   final Function()? onTap;
   final Color? color;
   final Color? colorWhenPressed;
-  FocusNode? focusNode;
+  final FocusNode? focusNode;
   final Size? size;
 
-  AppButton(
-      {required this.child,
+  const AppButton(
+      {super.key,
+      required this.child,
       required this.onTap,
       this.colorWhenPressed,
       this.focusNode,
@@ -26,8 +26,8 @@ class AppButton extends StatelessWidget {
         padding: EdgeInsets.zero,
         onPressed: onTap,
         color: color,
+        borderRadius: BorderRadius.circular(8),
         child: child,
-        borderRadius: BorderRadius.circular(4),
       ),
     );
   }

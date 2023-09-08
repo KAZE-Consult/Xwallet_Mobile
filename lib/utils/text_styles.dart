@@ -5,8 +5,14 @@ TextStyle get title =>
 TextStyle get largeTitle =>
     const TextStyle(fontWeight: FontWeight.w800, fontSize: 26);
 TextStyle get titleLight => const TextStyle(
-    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white);
+    fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 TextStyle get body => const TextStyle(fontSize: 16, color: Colors.black);
+TextStyle get bigBody => const TextStyle(fontSize: 18, color: Colors.black);
+TextStyle get smallTitle => const TextStyle(
+      fontSize: 20,
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+    );
 TextStyle get bodyBold => const TextStyle(
     fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold);
 TextStyle get greyedBodyBold => const TextStyle(
@@ -17,6 +23,8 @@ TextStyle get subtitle =>
     TextStyle(fontSize: 14, color: Colors.black.withOpacity(0.8));
 TextStyle get subtitle2 =>
     TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.5));
+TextStyle get subtitle2Light =>
+    TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.7));
 TextStyle get subtitle3 =>
     TextStyle(fontSize: 14, color: Colors.black.withOpacity(0.5));
 

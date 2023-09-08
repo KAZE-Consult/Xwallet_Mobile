@@ -56,7 +56,7 @@ class AppDropDownButtonField extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.only(left: 12, right: 12),
-        height: height ?? 40,
+        height: height ?? 45,
         width: width ?? double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 7),
@@ -65,11 +65,11 @@ class AppDropDownButtonField extends StatelessWidget {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (icon != null) ...[icon!, const SizedBox(width: 8)],
             Text(text, style: textStyle ?? subtitle2),
             const SizedBox(width: 8),
+            const Spacer(),
             Icon(Icons.keyboard_arrow_down_rounded,
                 color: arrowColor ?? Colors.black45)
           ],
@@ -109,7 +109,7 @@ class OptionsModal extends StatelessWidget {
         topRight: Radius.circular(20),
       ),
       child: Container(
-        color: Colors.amber,
+        color: Colors.white,
         child: Column(
           children: [
             if (optionsHeader != null) ...[
@@ -135,8 +135,8 @@ class OptionsModal extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(top: 8, bottom: 16),
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                padding: const EdgeInsets.only(top: 16, bottom: 16),
+                separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, index) {
                   return CupertinoButton(
                     padding: EdgeInsets.zero,

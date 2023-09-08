@@ -10,6 +10,7 @@ environment:
   sdk: '>=3.0.3 <4.0.0'
 
 dependencies:
+  carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.5
   flutter:
     sdk: flutter
@@ -18,6 +19,7 @@ dependencies:
   flutter_riverpod: ^2.3.10
   flutter_svg: ^2.0.7
   google_fonts: ^5.1.0
+  infinite_carousel: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -34,3 +36,4 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/icons/
+    - assets/images/
