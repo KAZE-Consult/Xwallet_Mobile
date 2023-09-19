@@ -1,34 +1,65 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:intl/intl.dart';
+import 'package:xwallet/model/wallet/telco_balance.dart';
+import 'package:xwallet/reuseables/telco_icon.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/text_styles.dart';
 
-class WalletCard extends StatelessWidget {
-  const WalletCard({super.key, required this.onRequest});
+class WalletCard extends ConsumerWidget {
+  const WalletCard(
+      {super.key, required this.onRequest, required this.telcoWallet});
 
   final VoidCallback onRequest;
+  final TelcoBalance telcoWallet;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currency = NumberFormat("#,##0", "en_US");
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Container(
-      height: 116,
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.5,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.boxFill,
+        color: colors.boxFill,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.boxStrokeColor),
+        border: Border.all(color: colors.boxStrokeColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('MTN', style: subtitle),
-          const SizedBox(height: 8),
-          Text('NGN 45,000', style: bodyBold),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TelcoIcon(id: telcoWallet.serviceProvider!),
+              Text(
+                telcoWallet.telcoWalletAccount ?? '',
+                style: styles.subtitle3,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Text('Airtime: ', style: styles.subtitle),
+              Text('₦${currency.format(telcoWallet.airtimeBalance ?? 0)}',
+                  style: styles.bodyBold),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Text('Data: ', style: styles.subtitle),
+              Text('${currency.format(telcoWallet.dataBalance ?? 0)}MB',
+                  style: styles.bodyBold),
+            ],
+          ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 30,
+            height: 25,
             child: CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () {
@@ -38,12 +69,12 @@ class WalletCard extends StatelessWidget {
                 children: [
                   Text(
                     'Request now',
-                    style: subtitle.copyWith(color: AppColors.accent),
+                    style: subtitle.copyWith(color: colors.accent),
                   ),
                   const SizedBox(width: 6),
                   SvgPicture.asset(
                     'assets/icons/request.svg',
-                    color: AppColors.accent,
+                    color: colors.accent,
                   )
                 ],
               ),

@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/app/sub_dealers/components/add_new_telco_modal.dart';
 import 'package:xwallet/app/sub_dealers/components/general_item_card.dart';
 import 'package:xwallet/reuseables/app_button.dart';
-import 'package:xwallet/reuseables/app_dropdown_field.dart';
-import 'package:xwallet/reuseables/sticky_header.dart';
-
-import '../../utils/app_colors.dart';
+import 'package:xwallet/utils/app_colors.dart';
 import '../../utils/text_styles.dart';
 import 'components/request_item_card.dart';
 
-class SubDealerDetails extends StatefulWidget {
+class SubDealerDetails extends ConsumerStatefulWidget {
   const SubDealerDetails({super.key});
   static open(BuildContext context) {
     return Navigator.push(
@@ -24,10 +21,10 @@ class SubDealerDetails extends StatefulWidget {
   }
 
   @override
-  State<SubDealerDetails> createState() => _SubDealerDetailsState();
+  ConsumerState<SubDealerDetails> createState() => _SubDealerDetailsState();
 }
 
-class _SubDealerDetailsState extends State<SubDealerDetails>
+class _SubDealerDetailsState extends ConsumerState<SubDealerDetails>
     with TickerProviderStateMixin {
   late final TabController tabController;
   @override
@@ -42,15 +39,16 @@ class _SubDealerDetailsState extends State<SubDealerDetails>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final colors = AppColors(ref);
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: AppColors.accent.withOpacity(0.1),
+            backgroundColor: colors.accent.withOpacity(0.1),
             elevation: 0,
-            iconTheme: const IconThemeData(color: AppColors.accent),
+            iconTheme: IconThemeData(color: colors.accent),
             actions: [
               IconButton(
                 onPressed: () {
@@ -88,7 +86,7 @@ class _SubDealerDetailsState extends State<SubDealerDetails>
                 children: [
                   AppButton(
                     size: Size((screenWidth * 0.5) - 24, 45),
-                    color: AppColors.accent,
+                    color: colors.accent,
                     child: Text(
                       'Update Info',
                       style: bodyBoldLight,
@@ -97,10 +95,10 @@ class _SubDealerDetailsState extends State<SubDealerDetails>
                   ),
                   AppButton(
                     size: Size((screenWidth * 0.5) - 24, 45),
-                    color: AppColors.accent.withOpacity(0.1),
+                    color: colors.accent.withOpacity(0.1),
                     child: Text(
                       'Add New Telco',
-                      style: bodyBold.copyWith(color: AppColors.accent),
+                      style: bodyBold.copyWith(color: colors.accent),
                     ),
                     onTap: () {
                       AddNewTelcoModal.open(context);
@@ -117,8 +115,8 @@ class _SubDealerDetailsState extends State<SubDealerDetails>
               child: TabBar(
                 isScrollable: true,
                 controller: tabController,
-                labelColor: AppColors.accent,
-                indicatorColor: AppColors.accent,
+                labelColor: colors.accent,
+                indicatorColor: colors.accent,
                 unselectedLabelColor: Colors.black45,
                 tabs: const [
                   Tab(text: 'General'),

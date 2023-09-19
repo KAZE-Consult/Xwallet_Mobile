@@ -20,7 +20,6 @@ class StickyHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
     return SizedBox.expand(child: child);
   }
 

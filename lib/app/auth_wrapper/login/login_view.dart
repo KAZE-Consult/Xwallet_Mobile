@@ -5,6 +5,8 @@ import 'package:xwallet/app/forgot_password/forgot_password.dart';
 import 'package:xwallet/app/auth_wrapper/login/vm/auth_vm.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/reuseables/text_area_field.dart';
+import 'package:xwallet/src/settings/settings_controller.dart';
+import 'package:xwallet/utils/extensions.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
 import '../../../utils/app_colors.dart';
@@ -21,33 +23,45 @@ class LoginView extends ConsumerStatefulWidget {
 }
 
 class _LoginViewState extends ConsumerState<LoginView> {
+  String userName = '';
+  String password = '';
   bool obscurePassword = true;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final authVm = AuthVm();
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.primary,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
-            Text('Welcome Back!', style: title),
-            const SizedBox(height: 12),
-            Text('Enter your Login details', style: subtitle2),
             const SizedBox(height: 16),
-            Text('Username', style: subtitle),
+            const Text('LOGO'),
+            const SizedBox(height: 16),
+            Text('Welcome Back!', style: styles.title),
+            const SizedBox(height: 16),
+            Text('Enter your Login details', style: styles.subtitle2),
+            const SizedBox(height: 16),
+            Text('Username', style: styles.subtitle),
             const SizedBox(height: 4),
-            const AppTextField(
+            AppTextField(
+              onChanged: (val) {
+                userName = val;
+              },
               hintText: 'Enter your username',
             ),
             const SizedBox(height: 16),
-            Text('Password', style: subtitle),
+            Text('Password', style: styles.subtitle),
             const SizedBox(height: 4),
             AppTextField(
               obscureText: obscurePassword,
               hintText: 'Enter your password',
+              onChanged: (val) {
+                password = val;
+              },
               suffixIcon: GestureDetector(
                 onTap: () {
                   obscurePassword = !obscurePassword;
@@ -57,43 +71,48 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   obscurePassword
                       ? Icons.remove_red_eye
                       : CupertinoIcons.eye_slash,
-                  color: Colors.black45,
+                  color: colors.reversePrimary.withOpacity(0.5),
                 ),
               ),
               maxLines: 1,
             ),
-            const SizedBox(height: 16),
-            CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                ForgotPassword.open(context);
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  ForgotPassword.open(context);
+                },
                 child: Text(
                   'Forgot Password',
-                  style: subtitle.copyWith(color: AppColors.accent),
+                  style: subtitle.copyWith(color: colors.accent),
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
             AppButton(
-              color: AppColors.accent,
+              color: colors.accent,
               size: const Size(double.infinity, 45),
               child: Text('Submit', style: bodyBoldLight),
-              onTap: () {
-                authVm.login('userName', 'password');
+              onTap: () async {
+                if (userName.isEmpty || password.isEmpty) return;
+                isLoading = true;
+                setState(() {});
+                await authVm.login(userName, password);
+                isLoading = false;
+                setState(() {});
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             CupertinoButton(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don't have an account? ", style: subtitle2),
+                  Text("Don't have an account? ", style: styles.subtitle2),
                   Text(
                     "Sign Up",
-                    style: subtitle2.copyWith(color: AppColors.accent),
+                    style: subtitle2.copyWith(color: colors.accent),
                   ),
                 ],
               ),
@@ -104,6 +123,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
           ],
         ),
       ),
-    );
+    ).showLoading(isLoading);
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/app/team/components/add_new_dealer.dart';
 import '../../reuseables/app_button.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/text_styles.dart';
 
-class TeamView extends StatelessWidget {
+class TeamView extends ConsumerWidget {
   const TeamView({super.key});
   static open(BuildContext context) {
     return Navigator.push(
@@ -18,14 +19,15 @@ class TeamView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: colors.white,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: AppColors.accent.withOpacity(0.1),
+        backgroundColor: colors.accent.withOpacity(0.1),
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.accent),
+        iconTheme: IconThemeData(color: colors.accent),
         title: Text(
           'Dealer Reps',
           style: bodyBold,
@@ -47,7 +49,7 @@ class TeamView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           AppButton(
-            color: AppColors.accent,
+            color: colors.accent,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

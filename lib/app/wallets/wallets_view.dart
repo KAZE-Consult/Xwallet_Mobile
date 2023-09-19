@@ -1,19 +1,25 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:xwallet/app/home/components/naira_wallet_preview.dart';
+import 'package:xwallet/app/wallets/vm/wallet_vm.dart';
+import 'package:xwallet/utils/extensions.dart';
 import '../../reuseables/app_button.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/text_styles.dart';
+import 'components/new_wallet_card.dart';
+import 'components/telco_wallet_card.dart';
 
-class WalletsView extends StatefulWidget {
+class WalletsView extends ConsumerStatefulWidget {
   const WalletsView({super.key});
 
   @override
-  State<WalletsView> createState() => _WalletsViewState();
+  ConsumerState<WalletsView> createState() => _WalletsViewState();
 }
 
-class _WalletsViewState extends State<WalletsView>
+class _WalletsViewState extends ConsumerState<WalletsView>
     with TickerProviderStateMixin {
+  int telcoWalletInFocus = 0;
   late TabController tabController;
   @override
   void initState() {
@@ -23,155 +29,89 @@ class _WalletsViewState extends State<WalletsView>
 
   @override
   Widget build(BuildContext context) {
+    final vm = ref.watch(walletVmProvider);
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
+    final wallet = vm.wallet;
+    final currency = NumberFormat("#,##0", "en_US");
+
+    if (wallet == null) {
+      return Scaffold(
+        backgroundColor: colors.bgColor,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: colors.primary,
+          ),
+        ),
+      );
+    }
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
+      backgroundColor: colors.bgColor,
       body: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Wallets', style: title),
+            child: Text('Wallets', style: styles.title),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text('Manage your wallets here', style: subtitle2),
+            child: Text('Manage your wallets here', style: styles.subtitle2),
           ),
           const SizedBox(height: 12),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.all(16),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Balance', style: body),
-                const SizedBox(height: 12),
-                Text('NGN 80,128', style: smallTitle),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: AppButton(
-                        color: AppColors.accent.withOpacity(0.1),
-                        child: const Text(
-                          'Withdraw',
-                          style: TextStyle(
-                            color: AppColors.accent,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onTap: () {},
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: AppButton(
-                        color: AppColors.accent,
-                        child: const Text(
-                          'Fund',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onTap: () {},
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          const NairaWalletPreview(),
+
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text('Telco Wallets', style: body),
+            child: Text('Telco Wallets', style: styles.body),
           ),
           const SizedBox(height: 8),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.boxFill,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.boxStrokeColor),
-            ),
-            child: Column(
-              children: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.abc),
-                    Icon(Icons.more_horiz),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          border: Border.all(color: Colors.black12),
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('980GB', style: bodyBold),
-                            const SizedBox(height: 4),
-                            Text('Data balance', style: subtitle),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                          border: Border.all(color: Colors.black12),
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('NGN 157,000', style: bodyBold),
-                            const SizedBox(height: 4),
-                            Text('Airtime balance', style: subtitle),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                AppButton(
-                  size: const Size(double.infinity, 50),
-                  color: AppColors.accent,
-                  child: Text('Restock', style: bodyBoldLight),
-                  onTap: () {},
-                )
-              ],
+          // telco wallets
+          SizedBox(
+            height: 200,
+            child: PageView.builder(
+              itemCount: wallet.telcoBalance!.length + 1,
+              onPageChanged: (value) {
+                telcoWalletInFocus = value;
+                setState(() {});
+              },
+              itemBuilder: (_, i) {
+                if (i == wallet.telcoBalance!.length) {
+                  return const NewWalletCard();
+                }
+                return TelcoWalletCard(telcoBalance: wallet.telcoBalance![i]);
+              },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 8),
+          //indicator
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              wallet.telcoBalance!.length,
+              (i) {
+                final isShowing = telcoWalletInFocus == i;
+                return CircleAvatar(
+                  radius: 5,
+                  backgroundColor: isShowing
+                      ? colors.accent
+                      : colors.accent.withOpacity(0.3),
+                ).padding(const EdgeInsets.symmetric(horizontal: 4));
+              },
+            ),
+          ),
+
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Recent Transactions', style: subtitle),
+                Text('Recent Transactions', style: styles.subtitle),
                 Text(
                   'See All',
-                  style: subtitle.copyWith(color: AppColors.accent),
+                  style: styles.subtitle.copyWith(color: colors.accent),
                 ),
               ],
             ),
@@ -182,25 +122,25 @@ class _WalletsViewState extends State<WalletsView>
             child: TabBar(
               controller: tabController,
               isScrollable: true,
-              indicatorColor: AppColors.accent,
+              indicatorColor: colors.accent,
               unselectedLabelStyle: subtitle,
               tabs: [
-                Tab(child: Text('Airtime', style: subtitle)),
-                Tab(child: Text('Data', style: subtitle)),
+                Tab(child: Text('Airtime', style: styles.subtitle)),
+                Tab(child: Text('Data', style: styles.subtitle)),
               ],
             ),
           ),
           const SizedBox(height: 12),
           for (int i = 0; i < 5; i++) ...[
             ListTile(
-              title: Text('Emmanuel Abu-Ekpeshie', style: body),
+              title: Text('Emmanuel Abu-Ekpeshie', style: styles.body),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 4),
-                  Text('NGN 15,000', style: bodyBold),
+                  Text('NGN 15,000', style: styles.bodyBold),
                   const SizedBox(height: 2),
-                  Text('23/10/2020', style: subtitle3),
+                  Text('23/10/2020', style: styles.subtitle3),
                 ],
               ),
               trailing: Container(

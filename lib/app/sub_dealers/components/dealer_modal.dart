@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/app/sub_dealers/sub_dealer_details.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-class DealerModal extends StatelessWidget {
+class DealerModal extends ConsumerWidget {
   const DealerModal({super.key});
   static open(BuildContext context) {
     return showModalBottomSheet(
@@ -15,8 +16,11 @@ class DealerModal extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
+    return Container(
+      color: colors.primary,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -24,8 +28,8 @@ class DealerModal extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
-            title: Text('Remilekun Airtimes', style: bigBody),
-            subtitle: const Text('0023488562'),
+            title: Text('Remilekun Airtimes', style: styles.body),
+            subtitle: Text('0023488562', style: styles.subtitle),
             trailing: Container(
               alignment: Alignment.center,
               width: 70,
@@ -38,19 +42,19 @@ class DealerModal extends StatelessWidget {
                   const Text('Active', style: TextStyle(color: Colors.green)),
             ),
           ),
-          Text('Sales', style: subtitle2),
-          Text('NGN 100,000', style: title),
+          Text('Sales', style: styles.subtitle2),
+          Text('NGN 100,000', style: styles.title),
           const SizedBox(height: 8),
           Align(
               alignment: Alignment.topRight,
-              child: Text('23/10/2020', style: subtitle2)),
+              child: Text('23/10/2020', style: styles.subtitle2)),
           const SizedBox(height: 8),
           AppButton(
             size: const Size(double.infinity, 45),
-            color: AppColors.accent.withOpacity(0.1),
+            color: colors.accent.withOpacity(0.1),
             child: Text(
               'View Profile',
-              style: bodyBold.copyWith(color: AppColors.accent),
+              style: bodyBold.copyWith(color: colors.accent),
             ),
             onTap: () {
               Navigator.pop(context);

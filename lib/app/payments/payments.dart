@@ -2,11 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/text_styles.dart';
 
-class Payments extends StatefulWidget {
+class Payments extends ConsumerStatefulWidget {
   const Payments({super.key});
   static open(BuildContext context) {
     return Navigator.push(
@@ -18,10 +19,11 @@ class Payments extends StatefulWidget {
   }
 
   @override
-  State<Payments> createState() => _PaymentsState();
+  ConsumerState<Payments> createState() => _PaymentsState();
 }
 
-class _PaymentsState extends State<Payments> with TickerProviderStateMixin {
+class _PaymentsState extends ConsumerState<Payments>
+    with TickerProviderStateMixin {
   late TabController tabController;
   @override
   void initState() {
@@ -31,13 +33,14 @@ class _PaymentsState extends State<Payments> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors(ref);
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: colors.white,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: AppColors.accent.withOpacity(0.1),
+        backgroundColor: colors.accent.withOpacity(0.1),
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.accent),
+        iconTheme: IconThemeData(color: colors.accent),
         title: Text(
           'Payments',
           style: bodyBold,
@@ -66,9 +69,9 @@ class _PaymentsState extends State<Payments> with TickerProviderStateMixin {
             margin: const EdgeInsets.symmetric(horizontal: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.boxFill,
+              color: colors.boxFill,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.boxStrokeColor),
+              border: Border.all(color: colors.boxStrokeColor),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,10 +125,10 @@ class _PaymentsState extends State<Payments> with TickerProviderStateMixin {
                 child: PhysicalModel(
                   elevation: 5,
                   borderRadius: BorderRadius.circular(100),
-                  color: AppColors.accent,
-                  child: const CircleAvatar(
-                    backgroundColor: AppColors.accent,
-                    child: Icon(Icons.add, color: Colors.white),
+                  color: colors.accent,
+                  child: CircleAvatar(
+                    backgroundColor: colors.accent,
+                    child: const Icon(Icons.add, color: Colors.white),
                   ),
                 ),
               ),
@@ -144,12 +147,12 @@ class _PaymentsState extends State<Payments> with TickerProviderStateMixin {
                 children: [
                   Text(
                     'Download all as pdf',
-                    style: bodyBold.copyWith(color: AppColors.accent),
+                    style: bodyBold.copyWith(color: colors.accent),
                   ),
                   const SizedBox(width: 4),
-                  const Icon(
+                  Icon(
                     CupertinoIcons.arrow_down_doc,
-                    color: AppColors.accent,
+                    color: colors.accent,
                   )
                 ],
               ),
@@ -159,8 +162,8 @@ class _PaymentsState extends State<Payments> with TickerProviderStateMixin {
           TabBar(
             isScrollable: true,
             controller: tabController,
-            labelColor: AppColors.accent,
-            indicatorColor: AppColors.accent,
+            labelColor: colors.accent,
+            indicatorColor: colors.accent,
             unselectedLabelColor: Colors.black45,
             tabs: const [
               Tab(text: 'Payments'),

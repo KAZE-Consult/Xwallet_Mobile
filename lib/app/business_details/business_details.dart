@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/reuseables/text_area_field.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-class BusinessDetails extends StatelessWidget {
+class BusinessDetails extends ConsumerWidget {
   const BusinessDetails({super.key});
   static open(BuildContext context) {
     return Navigator.push(
@@ -17,14 +18,15 @@ class BusinessDetails extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: colors.white,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: AppColors.accent.withOpacity(0.1),
+        backgroundColor: colors.accent.withOpacity(0.1),
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.accent),
+        iconTheme: IconThemeData(color: colors.accent),
         title: Text(
           'Business Details',
           style: bodyBold,
@@ -34,7 +36,7 @@ class BusinessDetails extends StatelessWidget {
             onPressed: () {},
             child: Text(
               'Save',
-              style: bodyBold.copyWith(color: AppColors.accent),
+              style: bodyBold.copyWith(color: colors.accent),
             ),
           )
         ],

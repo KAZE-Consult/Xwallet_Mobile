@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-import '../utils/app_colors.dart';
-
-class AppTextField extends StatelessWidget {
+class AppTextField extends ConsumerWidget {
   final String? hintText;
 
   final bool isReadOnly;
@@ -30,7 +30,7 @@ class AppTextField extends StatelessWidget {
 
   final double borderRadius;
 
-  final Color fillColor;
+  final Color? fillColor;
 
   final Widget? suffixIcon;
 
@@ -44,7 +44,7 @@ class AppTextField extends StatelessWidget {
 
   final TextCapitalization textCapitalization;
 
-  final Color borderColor;
+  final Color? borderColor;
 
   final int? maxLength;
 
@@ -63,10 +63,10 @@ class AppTextField extends StatelessWidget {
     this.inputFormatters,
     this.enableInteractiveSelection = true,
     this.obscureText = false,
-    this.fillColor = AppColors.boxFill,
+    this.fillColor,
     this.isTransparentBorder = false,
     this.textCapitalization = TextCapitalization.none,
-    this.borderColor = AppColors.boxStrokeColor,
+    this.borderColor,
     this.textColor,
     this.maxLength,
     this.minLines,
@@ -76,7 +76,9 @@ class AppTextField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return CupertinoTextField(
       padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10, right: 12),
       inputFormatters: inputFormatters,
@@ -94,8 +96,8 @@ class AppTextField extends StatelessWidget {
       maxLength: maxLength,
       onChanged: onChanged,
       decoration: BoxDecoration(
-        color: fillColor,
-        border: Border.all(color: borderColor),
+        color: fillColor ?? colors.boxFill,
+        border: Border.all(color: borderColor ?? colors.boxStrokeColor),
         borderRadius: BorderRadius.circular(7),
       ),
       suffix: Padding(
@@ -103,7 +105,8 @@ class AppTextField extends StatelessWidget {
         child: suffixIcon,
       ),
       placeholder: hintText,
-      placeholderStyle: subtitle2,
+      placeholderStyle: styles.subtitle2,
+      style: TextStyle(color: colors.reversePrimary),
       // placeholderStyle: TextStyle(fontSize: 14, color: Colors.black45),
     );
   }

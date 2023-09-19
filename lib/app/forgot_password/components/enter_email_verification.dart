@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../reuseables/app_button.dart';
 import '../../../reuseables/text_area_field.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/text_styles.dart';
 
-class EnterEmailVerification extends StatelessWidget {
+class EnterEmailVerification extends ConsumerWidget {
   const EnterEmailVerification({super.key});
   static open(BuildContext context) {
     return Navigator.push(
@@ -16,7 +17,8 @@ class EnterEmailVerification extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -36,7 +38,7 @@ class EnterEmailVerification extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             AppButton(
-              color: AppColors.accent,
+              color: colors.accent,
               size: const Size(double.infinity, 45),
               child: Text('Continue', style: bodyBoldLight),
               onTap: () {},

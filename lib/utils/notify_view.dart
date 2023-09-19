@@ -14,6 +14,7 @@ class NotifyView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(notifyVm);
+    final colors = AppColors(ref);
     return AnimatedPositioned(
       curve: Curves.easeInSine,
       duration: const Duration(milliseconds: 600),
@@ -21,7 +22,7 @@ class NotifyView extends ConsumerWidget {
       right: 0,
       top: vm.isShowing ? 0 : -170,
       child: Material(
-        color: AppColors.grey,
+        color: colors.grey,
         elevation: 10,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,9 +39,9 @@ class NotifyView extends ConsumerWidget {
                 children: [
                   Text(
                     'Dismiss',
-                    style: bodyBold.copyWith(color: AppColors.accent),
+                    style: bodyBold.copyWith(color: colors.accent),
                   ),
-                  const Icon(Icons.clear, color: AppColors.accent)
+                  Icon(Icons.clear, color: colors.accent)
                 ],
               ),
               onPressed: () {

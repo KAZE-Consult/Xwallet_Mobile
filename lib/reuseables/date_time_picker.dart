@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-class DateTimePicker extends StatelessWidget {
+class DateTimePicker extends ConsumerWidget {
   const DateTimePicker(
       {Key? key,
       this.type,
@@ -19,7 +20,8 @@ class DateTimePicker extends StatelessWidget {
   final DateTime? initialDate;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
@@ -62,9 +64,9 @@ class DateTimePicker extends StatelessWidget {
           padding: const EdgeInsets.only(right: 16, left: 16),
           height: 45,
           decoration: BoxDecoration(
-            color: AppColors.boxFill,
+            color: colors.boxFill,
             borderRadius: BorderRadius.circular(7),
-            border: Border.all(color: AppColors.boxStrokeColor),
+            border: Border.all(color: colors.boxStrokeColor),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

@@ -14,32 +14,27 @@ class Endpoints {
   String get baseUrl {
     switch (flavor) {
       case BuildFlavor.dev:
-        return 'https://staging-api-core.evoluticstech.com';
+        return 'https://api.xwalletapp.org/api/';
       case BuildFlavor.prod:
         return 'https://staging-api-core.evoluticstech.com';
     }
   }
 
-  String get validateClientExistsByPhoneNoAndEmail =>
-      '/core/rest/client/exists';
-  String get createIndividualClient => '/core/rest/client/individual';
-  String get viewClientInformationByClientNo => '/core/rest/client/view';
-  String get systemLogin => '/core/rest/authentication/login';
-  String get getWebAccessByClientNo => '/core/rest/client/web_access';
-  String get webAccessLogin => '/core/rest/web/access/login';
-  String get createWebAccess => '/core/rest/web/access';
-  String get searchPolicies => '/core/rest/policy/search';
-  String get getCodeAndTitleByCodeSubgroupAndCodeCat =>
-      '/core/rest/codes/sub/category';
-  String get getAllPolicyCoversByPolicyNoAndPolicyCode =>
-      '/core/rest/policy/covers/view';
-  String get getVehicleDetailsFromAutoReg => '/core/rest/asset/autoreg';
-  String get getProductCoversByProductCode => '/core/rest/product/code/covers';
-  String get calculateScenarioPremium =>
-      '/core/rest/policy/calculate/scenario/premium';
-  String get getProductBasicByProductCode => '/core/rest/product/basic';
-  String get updateClientContact => '/core/rest/client/contact';
-  String get saveClaim => '/core/rest/v2/claim/';
-  String get processForgotPasswordBeforeLoginAndSendNotification =>
-      '/core/rest/web/access/forgot-password/notification';
+  String get tokenLogin => 'api/Authentication/tokenLogin';
+  String get login => 'api/login/login';
+  String get logout => 'api/login/logOut';
+  String get fetchUserDetails => 'api/users/fetchDetails';
+  String get register => 'api/Registration/basicRegisterDealer';
+  String get sendToken => 'api/Registration/sendToken';
+  String get validateToken => 'api/Registration/validateToken';
+  String get getTransactionHistory => 'api/users/getTransactionHistory';
+  String get fetchBalance => 'api/users/fetchBalance';
+  String get sendToXwallet => 'api/Transaction/sendToXwallet';
+  String get sendToBank => 'api/Transaction/walletToBank';
+  String get getBankList => 'api/Transaction/getListOfBank';
+  String get walletNameEnquiry => 'api/Transaction/walletNameEnquiry';
+  String get sendTokenForCreateWallet =>
+      'api/Registration/sendTokenForCreateWallet';
+  String get createWalletAccount => 'api/users/createWalletAccount';
+  String get fetchListOfSubdealers => 'api/subdealers/fetchListOfSubdealers';
 }

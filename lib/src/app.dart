@@ -1,9 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:xwallet/app/nav/nav_wrapper.dart';
+import 'package:xwallet/reuseables/success_screen.dart';
+import 'package:xwallet/service/auth_service.dart';
+import 'package:xwallet/utils/endpoints.dart';
+import 'package:xwallet/utils/enums.dart';
 
 import 'settings/settings_controller.dart';
 
@@ -24,6 +28,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    final endpoints = Endpoints(flavor: BuildFlavor.dev);
+    AuthService(
+      dio: Dio(
+        BaseOptions(baseUrl: endpoints.baseUrl),
+      ),
+    );
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 

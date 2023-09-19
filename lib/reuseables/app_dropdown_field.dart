@@ -1,10 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utils/app_colors.dart';
 import '../utils/text_styles.dart';
 
-class AppDropDownButtonField extends StatelessWidget {
+class AppDropDownButtonField extends ConsumerWidget {
   const AppDropDownButtonField({
     Key? key,
     required this.text,
@@ -42,10 +43,16 @@ class AppDropDownButtonField extends StatelessWidget {
   ///the toString() method of each item should return the string you want to show as an option
   final List<AppDropDownItem>? options;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () async {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.focusedChild?.unfocus();
+        }
         if (onPressed != null) {
           onPressed!();
         }
@@ -60,18 +67,18 @@ class AppDropDownButtonField extends StatelessWidget {
         width: width ?? double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 7),
-          border: Border.all(color: AppColors.boxStrokeColor),
-          color: backgroundColor ?? AppColors.boxFill,
+          border: Border.all(color: colors.boxStrokeColor),
+          color: backgroundColor ?? colors.boxFill,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[icon!, const SizedBox(width: 8)],
-            Text(text, style: textStyle ?? subtitle2),
+            Text(text, style: textStyle ?? styles.subtitle2),
             const SizedBox(width: 8),
             const Spacer(),
             Icon(Icons.keyboard_arrow_down_rounded,
-                color: arrowColor ?? Colors.black45)
+                color: arrowColor ?? colors.reversePrimary.withOpacity(0.5))
           ],
         ),
       ),
@@ -92,7 +99,7 @@ class AppDropDownButtonField extends StatelessWidget {
   }
 }
 
-class OptionsModal extends StatelessWidget {
+class OptionsModal extends ConsumerWidget {
   const OptionsModal({
     Key? key,
     required this.options,
@@ -102,15 +109,18 @@ class OptionsModal extends StatelessWidget {
   final String? optionsHeader;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(20),
         topRight: Radius.circular(20),
       ),
       child: Container(
-        color: Colors.white,
+        color: colors.primary,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (optionsHeader != null) ...[
               const SizedBox(height: 12),
@@ -120,13 +130,16 @@ class OptionsModal extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(optionsHeader!, style: title),
+                    Text(optionsHeader!, style: styles.title),
                     IconButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: const Icon(Icons.clear,
-                          size: 30, color: Colors.black38),
+                      icon: Icon(
+                        Icons.clear,
+                        size: 30,
+                        color: colors.reversePrimary.withOpacity(0.4),
+                      ),
                     )
                   ],
                 ),
@@ -136,7 +149,9 @@ class OptionsModal extends StatelessWidget {
               child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.only(top: 16, bottom: 16),
-                separatorBuilder: (context, index) => const Divider(),
+                separatorBuilder: (context, index) => Divider(
+                  color: colors.reversePrimary.withOpacity(0.1),
+                ),
                 itemBuilder: (context, index) {
                   return CupertinoButton(
                     padding: EdgeInsets.zero,
@@ -144,9 +159,9 @@ class OptionsModal extends StatelessWidget {
                       Navigator.pop(context, options[index]);
                     },
                     child: Container(
-                      color: Colors.white,
+                      color: colors.primary,
                       child: ListTile(
-                        tileColor: Colors.white,
+                        tileColor: colors.primary,
                         leading: options[index].icon,
                         title: options[index].title,
                         subtitle: options[index].subtitle,

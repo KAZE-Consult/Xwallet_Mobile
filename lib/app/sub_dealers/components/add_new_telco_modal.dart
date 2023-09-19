@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/reuseables/app_dropdown_field.dart';
-import 'package:xwallet/reuseables/text_area_field.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-class AddNewTelcoModal extends StatelessWidget {
+class AddNewTelcoModal extends ConsumerWidget {
   const AddNewTelcoModal({super.key});
   static open(BuildContext context) {
     Navigator.push(
@@ -22,14 +22,15 @@ class AddNewTelcoModal extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: colors.white,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: AppColors.accent.withOpacity(0.1),
+        backgroundColor: colors.accent.withOpacity(0.1),
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.accent),
+        iconTheme: IconThemeData(color: colors.accent),
         title: Text('Add New Telco', style: bodyBold),
       ),
       body: ListView(
@@ -51,7 +52,7 @@ class AddNewTelcoModal extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           AppButton(
-            color: AppColors.accent,
+            color: colors.accent,
             child: Text('Add', style: bodyBoldLight),
             onTap: () {},
           )

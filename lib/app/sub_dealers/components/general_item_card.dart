@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/app_colors.dart';
 import '../../../utils/text_styles.dart';
 
-class GeneralItemCard extends StatelessWidget {
+class GeneralItemCard extends ConsumerWidget {
   const GeneralItemCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return Container(
       decoration: BoxDecoration(
-          color: AppColors.boxFill,
-          border: Border.all(color: AppColors.boxStrokeColor),
+          color: colors.boxFill,
+          border: Border.all(color: colors.boxStrokeColor),
           borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),

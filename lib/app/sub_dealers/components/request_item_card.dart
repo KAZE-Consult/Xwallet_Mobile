@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/app/sub_dealers/components/approve_request_modal.dart';
 
 import '../../../reuseables/app_button.dart';
@@ -6,17 +7,18 @@ import '../../../reuseables/app_dropdown_field.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/text_styles.dart';
 
-class RequestItemCard extends StatelessWidget {
+class RequestItemCard extends ConsumerWidget {
   const RequestItemCard({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return Container(
       decoration: BoxDecoration(
-          color: AppColors.boxFill,
-          border: Border.all(color: AppColors.boxStrokeColor),
+          color: colors.boxFill,
+          border: Border.all(color: colors.boxStrokeColor),
           borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -84,21 +86,21 @@ class RequestItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
-                color: AppColors.accent.withOpacity(0.1),
+                color: colors.accent.withOpacity(0.1),
                 size: const Size(100, 40),
                 child: Text(
                   'Decline',
-                  style: subtitle.copyWith(color: AppColors.accent),
+                  style: subtitle.copyWith(color: colors.accent),
                 ),
                 onTap: () {},
               ),
               const SizedBox(width: 8),
               AppButton(
-                color: AppColors.accent,
+                color: colors.accent,
                 size: const Size(100, 40),
                 child: Text(
                   'Approve',
-                  style: subtitle.copyWith(color: AppColors.white),
+                  style: subtitle.copyWith(color: colors.white),
                 ),
                 onTap: () {
                   ApproveRequestModal.open(context);

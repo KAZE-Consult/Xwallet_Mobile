@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/app_colors.dart';
 import '../../../utils/text_styles.dart';
 
-class AddWalletBtn extends StatelessWidget {
+class AddWalletBtn extends ConsumerWidget {
   const AddWalletBtn({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {},
@@ -27,14 +29,14 @@ class AddWalletBtn extends StatelessWidget {
               width: 45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: AppColors.accent.withOpacity(0.1),
+                color: colors.accent.withOpacity(0.1),
               ),
-              child: const Icon(Icons.add, color: AppColors.accent),
+              child: Icon(Icons.add, color: colors.accent),
             ),
             const SizedBox(height: 8),
             Text(
               'Add Wallet',
-              style: body.copyWith(color: AppColors.accent),
+              style: body.copyWith(color: colors.accent),
             ),
           ],
         ),

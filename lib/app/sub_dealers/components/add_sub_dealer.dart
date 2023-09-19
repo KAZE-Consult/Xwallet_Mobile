@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/reuseables/app_dropdown_field.dart';
 import 'package:xwallet/reuseables/text_area_field.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
-class AddSubDealer extends StatelessWidget {
+class AddSubDealer extends ConsumerWidget {
   const AddSubDealer({super.key});
   static open(BuildContext context) {
     Navigator.push(
@@ -22,15 +23,17 @@ class AddSubDealer extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: colors.primary,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: AppColors.accent.withOpacity(0.1),
+        backgroundColor: colors.accent.withOpacity(0.1),
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.accent),
-        title: Text('Add new Sub-dealer', style: bodyBold),
+        iconTheme: IconThemeData(color: colors.accent),
+        title: Text('Add new Sub-dealer', style: styles.bodyBold),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -63,7 +66,7 @@ class AddSubDealer extends StatelessWidget {
           const SizedBox(height: 16),
           const SizedBox(height: 24),
           AppButton(
-            color: AppColors.accent,
+            color: colors.accent,
             child: Text('Save Sub-dealer', style: bodyBoldLight),
             onTap: () {},
           )
