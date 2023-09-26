@@ -47,7 +47,8 @@ class AuthService {
   Future<ApiResponse<Session>> login(String userName, String password) async {
     try {
       final res = await dio.post(endpoints.login,
-          data: {"userName": "jacobian2", "password": "1234"});
+          // data: {"userName": "jacobian2", "password": "1234"});
+          data: {"userName": userName, "password": password});
       final session = Session.fromMap(res.data);
       return ApiResponse.success(session);
     } catch (e) {
@@ -67,12 +68,16 @@ class AuthService {
     }
   }
 
-  Future<ApiResponse<String>> sendToken(
-      String username, String otpReference) async {
+  Future<ApiResponse<String>> sendToken(String username, String otpReference,
+      {int? action}) async {
     try {
       final res = await dio.post(
         endpoints.sendToken,
-        data: {"username": username, "referenceId": otpReference, "action": 0},
+        data: {
+          "username": username,
+          "referenceId": otpReference,
+          "action": action ?? 0
+        },
       );
       return ApiResponse.success(res.data['otpReference']);
     } catch (e) {
@@ -84,7 +89,7 @@ class AuthService {
       String tokens, String username, String otpReference) async {
     try {
       final res = await dio.post(
-        endpoints.login,
+        endpoints.validateToken,
         data: {
           "otpReference": otpReference,
           "userName": username,
@@ -120,6 +125,60 @@ class AuthService {
     }
   }
 
-  Future changePassword() async {}
-  Future resetPassword() async {}
+  Future<ApiResponse<bool>> setTransactionPin(
+      String userName, String otpReference, String otp, String pin) async {
+    try {
+      final res = await dio.post(
+        endpoints.setTransactionPin,
+        data: {
+          "userName": userName,
+          "pin": pin,
+          "otpReference": otpReference,
+          "otp": otp,
+        },
+      );
+      if (res.data['responseCode'] != '00') {
+        return ApiResponse.error(res.data['responseDescription']);
+      }
+      return ApiResponse.success(true);
+    } catch (e) {
+      return ApiResponse.error(anErrorOccured);
+    }
+  }
+
+  Future<ApiResponse<bool>> changePassword(
+      String userName, String oldPassword, String newPassword) async {
+    try {
+      final res = await dio.post(
+        endpoints.changePassword,
+        data: {
+          "userName": userName,
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        },
+      );
+      if (res.data['responseCode'] != '00') {
+        return ApiResponse.error(res.data['responseDescription']);
+      }
+      return ApiResponse.success(true);
+    } catch (e) {
+      return ApiResponse.error(anErrorOccured);
+    }
+  }
+
+  Future<ApiResponse<bool>> resetPassword(String userName) async {
+    try {
+      await getAccessToken('', '');
+      final res = await dio.post(
+        endpoints.resetPassword,
+        queryParameters: {"userName": userName},
+      );
+      if (res.data['responseCode'] != '00') {
+        return ApiResponse.error(res.data['responseDescription']);
+      }
+      return ApiResponse.success(true);
+    } catch (e) {
+      return ApiResponse.error(anErrorOccured);
+    }
+  }
 }

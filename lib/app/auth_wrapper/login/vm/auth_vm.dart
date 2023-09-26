@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import 'package:xwallet/app/auth_wrapper/onboard/model/onboard_input_model.dart';
 import 'package:xwallet/model/session.dart';
 import 'package:xwallet/model/user_model.dart';
@@ -55,11 +56,9 @@ class AuthVm {
     return true;
   }
 
-  Future<bool> logout() async {
-    // final session = await currentSession.last;
-    // if (session == null) return false;
-    // final res = await api.logout(session.sessionId!);
-    // if (res.hasError) return false;
+  Future<bool> logout(Session session) async {
+    final res = await api.logout(session.sessionId!);
+    if (res.hasError) return false;
     updateSession(null);
     updateUserModel(null);
     return true;
@@ -87,10 +86,12 @@ class AuthVm {
     return true;
   }
 
-  Future<bool> sendOtp() async {
+  Future<bool> sendOtp({int? action}) async {
     final otpReference = await storage.read(key: 'otpReference');
     final username = await storage.read(key: 'username');
-    final res = await api.sendToken(username!, otpReference!);
+    final res = await api.sendToken(
+        username!, otpReference ?? const Uuid().v4(),
+        action: action);
     if (res.hasError) return false;
     //replace otp refeence with new one
     await storage.write(key: 'otpReference', value: res.data);
@@ -102,6 +103,20 @@ class AuthVm {
     final otpReference = await storage.read(key: 'otpReference');
     final username = await storage.read(key: 'username');
     final res = await api.validateToken(tokens, username!, otpReference!);
+    if (res.hasError) {
+      onError(res.error!);
+      return false;
+    }
+    storage.delete(key: 'otpReference');
+    storage.delete(key: 'username');
+    return true;
+  }
+
+  Future<bool> setTransactionPin(String pin, String otp,
+      {required ValueSetter<String> onError}) async {
+    final otpReference = await storage.read(key: 'otpReference');
+    final username = await storage.read(key: 'username');
+    final res = await api.setTransactionPin(username!, otpReference!, otp, pin);
     if (res.hasError) {
       onError(res.error!);
       return false;

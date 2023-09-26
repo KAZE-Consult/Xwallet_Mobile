@@ -29,6 +29,5 @@ class AppColors {
       isDarkMode ? const Color(0xFF101116) : const Color(0xFFF8F8F9);
   Color get boxStrokeColor =>
       isDarkMode ? const Color(0xff24272F) : const Color(0xFFEAEDF4);
-  Color accent = const Color(0xff44319B);
-  // Color accent = Colors.yellow[900]!;
+  Color accent = const Color(0xFF543DBC);
 }

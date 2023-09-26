@@ -37,4 +37,9 @@ class Endpoints {
       'api/Registration/sendTokenForCreateWallet';
   String get createWalletAccount => 'api/users/createWalletAccount';
   String get fetchListOfSubdealers => 'api/subdealers/fetchListOfSubdealers';
+  String get inviteSubDealer => 'api/subdealers/inviteSubDealer';
+  String get deactivateSubDealer => 'api/subdealers/deactivateSubdealers';
+  String get setTransactionPin => 'api/Transaction/setTransactionPin';
+  String get resetPassword => 'api/login/resetPassword';
+  String get changePassword => 'api/login/changePassword';
 }

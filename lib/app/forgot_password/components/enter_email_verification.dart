@@ -19,19 +19,21 @@ class EnterEmailVerification extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Scaffold(
+      backgroundColor: colors.primary,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('You\'ve got mail?', style: title),
+            Text('You\'ve got mail?', style: styles.title),
             const SizedBox(height: 12),
             Text("We'll send reset instructions to your mail",
-                style: subtitle2),
+                style: styles.subtitle2),
             const SizedBox(height: 16),
-            Text('Enter Code', style: subtitle),
+            Text('Enter Code', style: styles.subtitle),
             const SizedBox(height: 4),
             const AppTextField(
               hintText: 'Enter Code',
@@ -40,14 +42,14 @@ class EnterEmailVerification extends ConsumerWidget {
             AppButton(
               color: colors.accent,
               size: const Size(double.infinity, 45),
-              child: Text('Continue', style: bodyBoldLight),
+              child: Text('Continue', style: styles.bodyBoldLight),
               onTap: () {},
             ),
             const SizedBox(height: 16),
             CupertinoButton(
               child: Align(
                   alignment: Alignment.center,
-                  child: Text("Back to Sign-in", style: subtitle2)),
+                  child: Text("Back to Sign-in", style: styles.subtitle2)),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pop(context);

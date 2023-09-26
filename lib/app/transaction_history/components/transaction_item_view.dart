@@ -28,7 +28,7 @@ class TransactionItemView extends ConsumerWidget {
         style: styles.subtitle2,
       ),
       trailing: Text(
-        '₦${currency.format(transaction.amount)}',
+        '${transaction.tranType == 'C' ? '+ ' : '- '}₦${currency.format(transaction.amount)}',
         style: styles.bodyBold,
       ),
     );

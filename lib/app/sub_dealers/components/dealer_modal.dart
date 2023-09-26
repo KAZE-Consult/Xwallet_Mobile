@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xwallet/app/sub_dealers/components/is_active_view.dart';
 import 'package:xwallet/app/sub_dealers/sub_dealer_details.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
+import '../../../model/user_model.dart';
+
 class DealerModal extends ConsumerWidget {
-  const DealerModal({super.key});
-  static open(BuildContext context) {
+  const DealerModal(this.subdealer, {super.key});
+  final UserModel subdealer;
+  static open(BuildContext context, UserModel subdealer) {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => const DealerModal(),
+      builder: (context) => DealerModal(subdealer),
     );
   }
 
@@ -28,19 +32,13 @@ class DealerModal extends ConsumerWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
-            title: Text('Remilekun Airtimes', style: styles.body),
-            subtitle: Text('0023488562', style: styles.subtitle),
-            trailing: Container(
-              alignment: Alignment.center,
-              width: 70,
-              height: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Colors.green.withOpacity(0.1),
-              ),
-              child:
-                  const Text('Active', style: TextStyle(color: Colors.green)),
+            title: Text(
+              '${subdealer.firstName} ${subdealer.lastName}',
+              style: styles.body,
             ),
+            subtitle:
+                Text(subdealer.walletAccount ?? '--', style: styles.subtitle),
+            trailing: IsActiveView(isActive: subdealer.isActive == true),
           ),
           Text('Sales', style: styles.subtitle2),
           Text('NGN 100,000', style: styles.title),
@@ -58,7 +56,7 @@ class DealerModal extends ConsumerWidget {
             ),
             onTap: () {
               Navigator.pop(context);
-              SubDealerDetails.open(context);
+              SubDealerDetails.open(context, subdealer);
             },
           ),
           SizedBox(height: MediaQuery.of(context).padding.bottom + 16)

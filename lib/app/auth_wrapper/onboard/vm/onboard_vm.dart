@@ -38,7 +38,7 @@ class OnBoardVm with ChangeNotifier {
   }
 
   setServiceProvider(int? val) {
-    onboardInput.serviceProvider = 0;
+    onboardInput.serviceProvider = val;
     notifyListeners();
   }
 
@@ -66,6 +66,7 @@ class OnBoardVm with ChangeNotifier {
     if (onboardInput.emailAddress!.isEmpty) return false;
     if (!validateEmail(onboardInput.emailAddress!)) return false;
     if (onboardInput.roleId == null) return false;
+    if (onboardInput.roleId == 0) return false;
     return true;
   }
 

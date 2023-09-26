@@ -11,6 +11,7 @@ class GeneralItemCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Container(
       decoration: BoxDecoration(
           color: colors.boxFill,
@@ -23,13 +24,16 @@ class GeneralItemCard extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Text('Total Sales', style: subtitle3),
+              Text('Total Sales', style: styles.subtitle3),
               const Spacer(),
-              const Icon(Icons.more_horiz, color: Colors.black45),
+              Icon(
+                Icons.more_horiz,
+                color: colors.grey,
+              )
             ],
           ),
           const SizedBox(height: 16),
-          Text('NGN 250,000.000', style: title),
+          Text('NGN 250,000.000', style: styles.title),
           const SizedBox(height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,

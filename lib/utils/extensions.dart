@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:xwallet/utils/app_colors.dart';
 
 extension ProperCase on String {
   String toProperCase() {
@@ -17,6 +16,13 @@ extension ProperCase on String {
     }
 
     return result.join(' ');
+  }
+
+  bool isValidEmail() {
+    String emailPattern =
+        r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)*(\.[a-zA-Z]{2,})$';
+    RegExp regExp = RegExp(emailPattern);
+    return regExp.hasMatch(this);
   }
 }
 

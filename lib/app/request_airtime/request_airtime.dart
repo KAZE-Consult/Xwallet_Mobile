@@ -25,14 +25,17 @@ class RequestAirtime extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Scaffold(
-      backgroundColor: colors.white,
+      backgroundColor: colors.primary,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: colors.isDarkMode
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
         backgroundColor: colors.accent.withOpacity(0.1),
         elevation: 0,
         iconTheme: IconThemeData(color: colors.accent),
-        title: Text('Request Airtime', style: bodyBold),
+        title: Text('Request Airtime', style: styles.bodyBold),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -42,7 +45,7 @@ class RequestAirtime extends ConsumerWidget {
             child: Text(
               'To request for airtime, fill in the information below.',
               textAlign: TextAlign.center,
-              style: subtitle3,
+              style: styles.subtitle3,
             ),
           ),
           const SizedBox(height: 16),
@@ -51,13 +54,13 @@ class RequestAirtime extends ConsumerWidget {
           const SizedBox(height: 16),
           const AppDropDownButtonField(text: 'Select Service Provider'),
           const SizedBox(height: 16),
-          Text('Airtime amount', style: subtitle),
+          Text('Airtime amount', style: styles.subtitle),
           const SizedBox(height: 4),
           const AppTextField(hintText: 'Amount'),
           const SizedBox(height: 24),
           AppButton(
             color: colors.accent,
-            child: Text('Send Request', style: bodyBoldLight),
+            child: Text('Send Request', style: styles.bodyBoldLight),
             onTap: () {},
           )
         ],

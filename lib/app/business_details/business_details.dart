@@ -20,8 +20,9 @@ class BusinessDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = AppColors(ref);
+    final styles = TextStyles(ref);
     return Scaffold(
-      backgroundColor: colors.white,
+      backgroundColor: colors.primary,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: colors.accent.withOpacity(0.1),
@@ -29,7 +30,7 @@ class BusinessDetails extends ConsumerWidget {
         iconTheme: IconThemeData(color: colors.accent),
         title: Text(
           'Business Details',
-          style: bodyBold,
+          style: styles.bodyBold,
         ),
         actions: [
           CupertinoButton(

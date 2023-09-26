@@ -15,7 +15,7 @@ class HomeVm with ChangeNotifier {
     print('fetching history');
     final res = await walletService.getTransactionHistory(sessionId);
     if (res.hasError) return;
-    transactionHistory = res.data!.reversed.toList();
+    transactionHistory = res.data!.toList();
     notifyListeners();
   }
 

@@ -79,35 +79,41 @@ class AppTextField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = AppColors(ref);
     final styles = TextStyles(ref);
-    return CupertinoTextField(
-      padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10, right: 12),
-      inputFormatters: inputFormatters,
-      enableInteractiveSelection: enableInteractiveSelection,
-      enabled: enabled,
-      textCapitalization: textCapitalization,
-      controller: controller,
-      focusNode: focusNode,
-      obscureText: obscureText,
-      minLines: minLines,
-      readOnly: isReadOnly,
-      onTap: onTap,
-      maxLines: maxLines,
-      keyboardType: keyboardType,
-      maxLength: maxLength,
-      onChanged: onChanged,
-      decoration: BoxDecoration(
-        color: fillColor ?? colors.boxFill,
-        border: Border.all(color: borderColor ?? colors.boxStrokeColor),
-        borderRadius: BorderRadius.circular(7),
+    return CupertinoTheme(
+      data: CupertinoThemeData(
+          brightness: colors.isDarkMode ? Brightness.dark : Brightness.light),
+      child: CupertinoTextField(
+        padding:
+            const EdgeInsets.only(left: 12, top: 10, bottom: 10, right: 12),
+        inputFormatters: inputFormatters,
+        enableInteractiveSelection: enableInteractiveSelection,
+        enabled: enabled,
+        textCapitalization: textCapitalization,
+        controller: controller,
+        focusNode: focusNode,
+        obscureText: obscureText,
+        minLines: minLines,
+        readOnly: isReadOnly,
+        onTap: onTap,
+        maxLines: maxLines,
+        keyboardType: keyboardType,
+        maxLength: maxLength,
+        onChanged: onChanged,
+
+        decoration: BoxDecoration(
+          color: fillColor ?? colors.boxFill,
+          border: Border.all(color: borderColor ?? colors.boxStrokeColor),
+          borderRadius: BorderRadius.circular(7),
+        ),
+        suffix: Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: suffixIcon,
+        ),
+        placeholder: hintText,
+        placeholderStyle: styles.subtitle2,
+        style: TextStyle(color: colors.reversePrimary),
+        // placeholderStyle: TextStyle(fontSize: 14, color: Colors.black45),
       ),
-      suffix: Padding(
-        padding: const EdgeInsets.only(right: 12.0),
-        child: suffixIcon,
-      ),
-      placeholder: hintText,
-      placeholderStyle: styles.subtitle2,
-      style: TextStyle(color: colors.reversePrimary),
-      // placeholderStyle: TextStyle(fontSize: 14, color: Colors.black45),
     );
   }
 }

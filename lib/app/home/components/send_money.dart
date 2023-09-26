@@ -1,16 +1,22 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xwallet/app/auth_wrapper/login/vm/auth_vm.dart';
 import 'package:xwallet/app/home/components/select_bank.dart';
 import 'package:xwallet/app/wallets/vm/wallet_vm.dart';
 import 'package:xwallet/model/bank_model.dart';
 import 'package:xwallet/reuseables/app_button.dart';
 import 'package:xwallet/reuseables/app_dropdown_field.dart';
+import 'package:xwallet/reuseables/set_pin.dart';
 import 'package:xwallet/reuseables/success_screen.dart';
 import 'package:xwallet/reuseables/text_area_field.dart';
 import 'package:xwallet/utils/app_colors.dart';
 import 'package:xwallet/utils/extensions.dart';
+import 'package:xwallet/utils/helper_functions.dart';
 import 'package:xwallet/utils/text_styles.dart';
 
 class SendMoney extends ConsumerStatefulWidget {
@@ -40,8 +46,18 @@ class _SendMoneyState extends ConsumerState<SendMoney> {
   void initState() {
     super.initState();
     vm = ref.read(walletVmProvider.notifier);
-    vm.setSenderAccountNo(vm.wallet!.walletAccount!);
-    vm.getBankList();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+      final user = ref.read(userProvider).value;
+      if (user?.isPinset == false) {
+        final hasSet = await SetPin.open(context, true);
+        if (hasSet != true) {
+          Navigator.pop(context);
+        }
+        return;
+      }
+      vm.setSenderAccountNo(vm.wallet!.walletAccount!);
+      vm.getBankList();
+    });
   }
 
   @override
@@ -105,7 +121,7 @@ class _SendMoneyState extends ConsumerState<SendMoney> {
           Text('Account number', style: styles.subtitle),
           const SizedBox(height: 4),
           AppTextField(
-            // enabled: vm.sendToXWalletInputModel.transferType != null,
+            enabled: vm.sendToXWalletInputModel.transferType != null,
             hintText: 'Enter destination account',
             maxLength: 10,
             onChanged: (val) {
@@ -163,6 +179,7 @@ class _SendMoneyState extends ConsumerState<SendMoney> {
             color: colors.accent,
             child: Text('Submit', style: styles.bodyBoldLight),
             onTap: () async {
+              //validate
               if (transferType == '1') {
                 sendMoneyToBank();
               } else {
@@ -176,6 +193,11 @@ class _SendMoneyState extends ConsumerState<SendMoney> {
   }
 
   void sendMoneyToXWallet() async {
+    if (vm.sendToXWalletInputModel.amount! > vm.wallet!.walletBalance!) {
+      showSnackbar(context, 'Amount greater than wallet balance!');
+      return;
+    }
+
     isLoading = true;
     setState(() {});
     await vm.sendMoneyToWallet(

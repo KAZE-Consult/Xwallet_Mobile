@@ -22,7 +22,8 @@ class TextStyles {
       const TextStyle(fontWeight: FontWeight.w800, fontSize: 26);
   TextStyle get titleLight => const TextStyle(
       fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
-  TextStyle get bigBody => const TextStyle(fontSize: 18, color: Colors.black);
+  TextStyle get bigBody =>
+      TextStyle(fontSize: 18, color: isDarkMode ? Colors.white : Colors.black);
   TextStyle get smallTitle => TextStyle(
         fontSize: 20,
         color: isDarkMode ? Colors.white : Colors.black,

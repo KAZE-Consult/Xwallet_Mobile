@@ -64,7 +64,7 @@ class _MoreInfoState extends ConsumerState<MoreInfo> {
                   .toList(),
               onSelect: (value) {
                 selectedTelco = getTecloByTitle(value?.title.data);
-                vm.setServiceProvider(selectedTelco!.id);
+                vm.setServiceProvider(selectedTelco?.id);
               },
             ),
             const SizedBox(height: 16),

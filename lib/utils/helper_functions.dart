@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 int? getRoleId(String? val) {
   switch (val?.toLowerCase()) {
     case 'dealer':
@@ -29,4 +31,12 @@ bool validateEmail(String email) {
       r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)*(\.[a-zA-Z]{2,})$';
   RegExp regExp = RegExp(emailPattern);
   return regExp.hasMatch(email);
+}
+
+showSnackbar(BuildContext context, String msg, {bool? isSuccess}) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+        backgroundColor: isSuccess == true ? Colors.green : null,
+        content: Text(msg)),
+  );
 }

@@ -7,7 +7,7 @@ class TransTypeView extends StatelessWidget {
   Widget build(BuildContext context) {
     if (transType == 'D') {
       return const CircleAvatar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
         child: Icon(
           Icons.arrow_outward_sharp,
           color: Colors.white,
@@ -18,7 +18,7 @@ class TransTypeView extends StatelessWidget {
       flipY: true,
       flipX: true,
       child: const CircleAvatar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         child: Icon(Icons.arrow_outward_rounded, color: Colors.white),
       ),
     );
